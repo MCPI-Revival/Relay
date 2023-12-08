@@ -1,6 +1,4 @@
-#include <config.hpp>
 #include <relay.hpp>
-
 #include <iostream>
 
 //using RoadRunner::Server;
