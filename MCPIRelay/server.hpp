@@ -41,11 +41,9 @@ namespace MCPIRelay {
 		void disconnect_client(MCPIRelay::Client *client);
 		void post_to_chat(std::string msg);
 
-		void handle_upstream_packet(RakNet::Packet *packet);
 		template <typename T>
 		void send_downstream_packet(T &packet);
-		int64_t generate_unique_token();
-
+		
 		Server(Relay *relay, RakNet::RakPeerInterface* peer, RakNet::RakNetGUID guid);
 		Server(Relay *relay, std::string name, std::string host, uint16_t port);
 		~Server() {};
