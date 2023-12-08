@@ -85,16 +85,7 @@ std::pair<RakNet::RakPeerInterface*, RakNet::RakNetGUID> Server::create_connecti
 		}
 		return std::make_pair(targetPeer, targetGuid);
 	} else {
-		this->ready = false;
-		ConnectionRequestPacket request;
-		this->awaiting_token = generate_unique_token();
-		request.token = this->awaiting_token;
-		send_downstream_packet(request);
-		std::cout << "[SERVER]: Sent token to remote server: " << this->awaiting_token << "\n";
-
-		bool awaiting_answer = true;
-		RakNet::Packet *packet;
-
+		// TODO: Remove this
 		return std::make_pair(this->temporary_peer, this->temporary_guid);
 	}
 }
