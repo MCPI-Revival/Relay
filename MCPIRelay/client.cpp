@@ -109,7 +109,6 @@ void Client::handle_upstream_packet(RakNet::Packet *packet) {
 		uint8_t packet_id;
 		stream.Read<uint8_t>(packet_id);
 		if (packet_id == LoginPacket::packet_id) {
-			// Edit the username to add the discriminator and remove special characters
 			LoginPacket login;
 			login.deserialize_body(&stream);
 			this->username = login.username.C_String();
@@ -224,6 +223,10 @@ void Client::handle_upstream_packet(RakNet::Packet *packet) {
 				return;
 			}
 
+			/*
+			 * This is the code for making the player unable to escape the world border by wrapping their coordinates around.
+			 * I am disabling it for now as it should be a configurable thing.
+			 * TODO: Make this configurable
 			if (move_player.x < 0.f) {
 				move_player.x += 256.f;
 				valid = false;
@@ -238,6 +241,7 @@ void Client::handle_upstream_packet(RakNet::Packet *packet) {
 				move_player.z -= 256.f;
 				valid = false;
 			}
+			*/
 			if (this->debug) post_to_chat("!" + std::to_string(move_player.x) + ":" + std::to_string(move_player.y) + ":" + std::to_string(move_player.z) + " " + std::to_string(valid));
 			if (!valid) {
 				int32_t temporary_eid = move_player.entity_id;

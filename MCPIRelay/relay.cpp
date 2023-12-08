@@ -39,8 +39,6 @@ Relay::Relay(uint16_t port, uint16_t server_port, uint32_t max_clients) {
     while (isRunning) {
     	for (int i = 0; i < 100; i++) {
 			handle_client_networking();
-			//handle_server_networking();
-
     	}
     	handle_chat_file();
     	if (empty_packets >= 100) {
@@ -120,6 +118,13 @@ void Relay::handle_client_networking() {
 					std::cerr << "Failed to create client: " << e.what() << std::endl;
 					break;
 				}
+				/*
+				 * Auth system integration
+				 * Currently disabled due to not being configurable.
+				 * For now everyone is granted the rank of admin
+				 * surely a perfectly balanced thing with no exploits.
+				 * TODO: Make this configurable / depend on the server
+
 				client->setup_perms_by_ip(packet->systemAddress.ToString(false));
 
 				if (!client->authorized) {
@@ -127,6 +132,10 @@ void Relay::handle_client_networking() {
 					delete client;
 					break;
 				}
+				*/
+				// Give admin rights
+				client->authorized = true;
+				client->rank = 3;
 
 				client->log() << "connect " << packet->systemAddress.ToString() << std::endl;
 
@@ -153,56 +162,6 @@ void Relay::handle_client_networking() {
 		default:
 			if (this->clients.count(packet->guid) != 0) {
 				this->clients[packet->guid]->handle_upstream_packet(packet);
-			}
-			break;
-		}
-	}
-	peer->DeallocatePacket(packet);
-}
-
-void Relay::handle_server_networking() {
-	// Handle server > relay communications
-	for(const auto& pair : server_peers) {
-		//RakNet::RakNetGUID clientGUID = pair.first;
-		//MCPIRelay::Server* server = pair.second;
-		//server->handle_downstream_packets();
-	}
-	// Handle client > relay communications
-	RakNet::Packet *packet;
-	packet = server_peer->Receive();
-	if(!packet) {
-		return;
-	}
-	if(packet->bitSize != 0) {
-		RakNet::BitStream receive_stream(packet->data, (int)packet->bitSize, false);
-
-		uint8_t packet_id;
-		receive_stream.Read<uint8_t>(packet_id);
-		switch (packet_id) {
-		case ID_NEW_INCOMING_CONNECTION:
-			std::cout << "Server " << packet->guid.ToString() << " connected" << std::endl;
-			if (this->server_peers.count(packet->guid) == 0) {
-				MCPIRelay::Server *server = new MCPIRelay::Server(this, server_peer, packet->guid);
-
-				//server->guid = packet->guid;
-				this->server_peers[packet->guid] = server;
-			} else {
-				std::cout << "Server already exists!" << std::endl;
-			}
-			break;
-		case ID_NO_FREE_INCOMING_CONNECTIONS:
-			break;
-		case ID_DISCONNECTION_NOTIFICATION:
-		case ID_CONNECTION_LOST:
-			std::cout << "Server " << packet->guid.ToString() << " disconnected" << std::endl;
-			if (this->server_peers.count(packet->guid) != 0) {
-				delete this->server_peers[packet->guid];
-				this->server_peers.erase(packet->guid);
-			}
-			break;
-		default:
-			if (this->server_peers.count(packet->guid) != 0) {
-				this->server_peers[packet->guid]->handle_upstream_packet(packet);
 			}
 			break;
 		}
