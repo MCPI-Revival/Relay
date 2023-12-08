@@ -30,6 +30,11 @@ Relay::Relay(uint16_t port, uint16_t server_port, uint32_t max_clients) {
 	RakNet::SocketDescriptor sd(port, 0);
 	peer->Startup(max_clients, &sd, 1);
     peer->SetMaximumIncomingConnections(max_clients);
+	// Set the MOTD
+	RakNet::RakString data = "MCCPP;MINECON;RELAY";
+        RakNet::BitStream stream;
+        data.Serialize(&stream);
+        peer->SetOfflinePingResponse((const char *)stream.GetData(), stream.GetNumberOfBytesUsed());
 
     this->server_peer = RakNet::RakPeerInterface::GetInstance();
 	RakNet::SocketDescriptor ssd(server_port, 0);
