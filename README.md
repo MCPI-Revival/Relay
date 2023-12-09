@@ -3,11 +3,14 @@ Intermediary program to seamlessly connect clients with multiple servers.
 # Compiling
 Run `cmake --build . --target all`
 The binary should be located at `build/default/MCPIRelay/mcpi-relay`
+
 ## Running 
 The relay expects a `servers.json` file in the working directory.  
 Optionally, `authorized.json` can be used for connecting an auth system.
 
-The dedicated MCPI servers running on localhost should not use port 19132, and should not be available publicly. All connections must pass through the relay for correct functionality.
+The dedicated MCPI servers running on localhost should not use port 19132, and should not be available publicly. All connections must pass through the relay for correct functionality.  
+For proper chunk loading, add [libno-compress.so](https://cdn.discordapp.com/attachments/1008833425056211045/1123781927053303858/libno-compress.so) to the mods folder for every server.  
+
 # Documentation
 ! This page is not finished yet !
 If you have any questions, ask @NikZapp.
