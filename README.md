@@ -62,7 +62,7 @@ The `protected` field holds information about the protected areas for each serve
 	"destination": "server-name" - optional
 }
 ```
-Any interactions inside of a `pos1`-`pos2` cuboid will be suppressed by the relay, meaning you will not be able to place/break blocks, or use items. However, being inside the are does not count as an interaction and will not be stopped.
+Any interactions inside of a `pos1`-`pos2` cuboid will be suppressed by the relay, meaning you will not be able to place/break blocks, or use items. However, being inside the area does not count as an interaction and will not be stopped.
 
 In the provided example, the area `house` is protected from modifications, while a `portal` area in both servers allows for movement between them.
 
