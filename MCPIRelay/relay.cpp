@@ -70,7 +70,6 @@ void Relay::load_servers() {
 	//std::cout << servers.dump(4) << std::endl;
 	for(auto& object : servers.items()) {
 		MCPIRelay::Server *server = new MCPIRelay::Server(this, object.key(), object.value()["host"], object.value()["port"]);
-		server->direct = object.value()["direct"];
 		server->require_authorized_clients = object.value()["auth_only"];
 		for(auto& area : object.value()["protected"].items()) {
 			int32_t x1 = area.value()["pos1"][0];
@@ -117,30 +116,21 @@ void Relay::handle_client_networking() {
 
 			if (this->clients.count(packet->guid) == 0) {
 				MCPIRelay::Client *client;
+
 				try {
 					client = new MCPIRelay::Client(this, this->servers["main"]);
 				} catch(const std::exception& e) {
 					std::cerr << "Failed to create client: " << e.what() << std::endl;
 					break;
 				}
-				/*
-				 * Auth system integration
-				 * Currently disabled due to not being configurable.
-				 * For now everyone is granted the rank of admin
-				 * surely a perfectly balanced thing with no exploits.
-				 * TODO: Make this configurable / depend on the server
 
 				client->setup_perms_by_ip(packet->systemAddress.ToString(false));
 
-				if (!client->authorized) {
+				if(this->servers["main"]->require_authorized_clients && !client->authorized) {
 					std::cout << "Client not authorized!" << std::endl;
 					delete client;
 					break;
 				}
-				*/
-				// Give admin rights
-				client->authorized = true;
-				client->rank = 3;
 
 				client->log() << "connect " << packet->systemAddress.ToString() << std::endl;
 

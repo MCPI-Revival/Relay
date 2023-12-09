@@ -427,16 +427,25 @@ void Client::remove_entities() {
 
 void Client::setup_perms_by_ip(std::string ip) {
 	std::ifstream f("authorized.json");
-	json authorized = json::parse(f);
-	if (authorized.contains(ip)) {
-		this->authorized = true;
-		this->rank = authorized[ip]["level"];
-		this->token_name = authorized[ip]["name"];
-		authorized.erase(ip);
+	try {
+		json authorized = json::parse(f);
+		if (authorized.contains(ip)) {
+			this->authorized = true;
+			this->rank = authorized[ip]["level"];
+			this->token_name = authorized[ip]["name"];
+			authorized.erase(ip);
+		} else {
+			this->authorized = false;
+			this->rank = 1;
+		}
+		std::ofstream o("authorized.json");
+		o << std::setw(4) << authorized << std::endl;
+	} catch(const std::exception& e) {
+		std::cout << "Failed to get auth details, check that an authorized.json file is present and valid." << std::endl;
+		std::cout << "Rank set to 1 (DEFAULT)" << std::endl;
+		this->authorized = false;
+		this->rank = 1;
 	}
-
-	std::ofstream o("authorized.json");
-	o << std::setw(4) << authorized << std::endl;
 }
 
 std::ostream& Client::log() {

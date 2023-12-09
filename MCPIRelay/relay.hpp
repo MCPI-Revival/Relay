@@ -26,7 +26,6 @@ namespace MCPIRelay {
         void load_servers();
         void load_tokens();
         void handle_client_networking();
-        void handle_server_networking();
         void handle_chat_file();
 
         void post_to_chat(std::string message);

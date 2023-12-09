@@ -21,13 +21,7 @@ namespace MCPIRelay {
 		uint16_t port = 19132;
 		std::string name = "???";
 
-		RakNet::RakPeerInterface* temporary_peer;
-		RakNet::RakNetGUID temporary_guid;
-
-		bool ready = false;
-		int64_t awaiting_token;
 		bool require_authorized_clients = false;
-		bool direct = true;
 
 		std::unordered_map<std::string, MCPIRelay::Area	*> protected_areas;
 		std::unordered_map<std::string, std::string> server_gateways_by_area;
@@ -41,10 +35,6 @@ namespace MCPIRelay {
 		void disconnect_client(MCPIRelay::Client *client);
 		void post_to_chat(std::string msg);
 
-		template <typename T>
-		void send_downstream_packet(T &packet);
-		
-		Server(Relay *relay, RakNet::RakPeerInterface* peer, RakNet::RakNetGUID guid);
 		Server(Relay *relay, std::string name, std::string host, uint16_t port);
 		~Server() {};
 	};
