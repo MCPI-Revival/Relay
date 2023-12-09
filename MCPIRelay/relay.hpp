@@ -1,8 +1,8 @@
 #pragma once
 
-#include <server.hpp>
 #include <client.hpp>
 #include <commands.hpp>
+#include <server.hpp>
 
 #include <RakPeerInterface.h>
 
@@ -11,12 +11,12 @@
 #include <vector>
 
 namespace MCPIRelay {
-	class Client;
+    class Client;
 
     class Relay {
     public:
-		RakNet::RakPeerInterface *peer;
-		RakNet::RakPeerInterface *server_peer;
+        RakNet::RakPeerInterface *peer;
+        RakNet::RakPeerInterface *server_peer;
         CommandParser *command_parser;
         std::map<RakNet::RakNetGUID, Client *> clients;
         std::map<RakNet::RakNetGUID, Server *> server_peers;
