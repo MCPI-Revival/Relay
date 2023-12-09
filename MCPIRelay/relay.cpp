@@ -26,12 +26,22 @@ Relay::Relay(uint16_t port, uint16_t server_port, uint32_t max_clients) {
     std::signal(SIGINT, exit_program);
 
     std::cout << "Starting relay" << std::endl;
-    load_servers();
+
+    try {
+        load_servers();
+    } catch (const std::exception &e) {
+        std::cout << "Error while loading servers list. Check your servers.json file." << std::endl;
+        std::cout << "Reason: " << e.what() << std::endl;
+        return;
+    }
+
     this->command_parser = new MCPIRelay::CommandParser();
+
     this->peer = RakNet::RakPeerInterface::GetInstance();
     RakNet::SocketDescriptor sd(port, 0);
     peer->Startup(max_clients, &sd, 1);
     peer->SetMaximumIncomingConnections(max_clients);
+
     // Set the MOTD
     RakNet::RakString data = "MCCPP;MINECON;RELAY";
     RakNet::BitStream stream;

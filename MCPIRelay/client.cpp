@@ -444,6 +444,7 @@ void Client::setup_perms_by_ip(std::string ip) {
         o << std::setw(4) << authorized << std::endl;
     } catch (const std::exception &e) {
         std::cout << "Failed to get auth details, check that an authorized.json file is present and valid." << std::endl;
+        std::cout << "Reason: " << e.what() << std::endl;
         std::cout << "Rank set to 1 (DEFAULT)" << std::endl;
         this->authorized = false;
         this->rank = 1;
