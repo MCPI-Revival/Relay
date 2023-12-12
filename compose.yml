@@ -1,0 +1,26 @@
+name: mcpi-relay
+services:
+  relay:
+    image: mcpi-relay
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 19132
+      published: "19132"
+      protocol: udp
+    volumes:
+    - type: bind
+      source: ./data/relay
+      target: /data
+      bind:
+        create_host_path: true
+#   This is a sample compose.yml, you can append other servers to this file for networking
+#   In that case, you can use the following instruction to make the relay start after all
+#   the servers that you add as services
+#    depends_on:
+#    - main
+#    - resources
+networks:
+  default:
+    name: mcpi-relay_default
